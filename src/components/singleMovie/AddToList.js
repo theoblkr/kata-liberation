@@ -1,13 +1,17 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { addMovieRating } from '../../store/actions/movies'
+import { addMovieToList } from '../../store/actions/movies'
 
 const AddToList = ({ moviesId }) => {
   const dispatch = useDispatch()
 
   const addToList = () => {
-    dispatch(addMovieRating(moviesId))
+    const tokenSession = localStorage.getItem('tokenUser')
+    if(tokenSession) {
+      dispatch(addMovieToList(moviesId, tokenSession))
+    }
+    return false
   }
   return (
     <>

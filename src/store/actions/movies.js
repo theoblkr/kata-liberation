@@ -1,6 +1,6 @@
 import { callApi } from '../../helpers/api'
 import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
-import { retriveGuestSessionId } from './authentication'
+import { retriveApprovalUser, retriveGuestSessionId, retriveSessionUser } from './authentication'
 
 export const getMovies =  (page) => {
   return async (dispatch) => {
@@ -69,28 +69,30 @@ export const addMovieRating = (id, rating) => {
   }
 }
 
+export const askForCreatingMovieList = async () => {
+  const approvalUser = await retriveApprovalUser()
+  return approvalUser
+}
+
 export const createMovieList = () => {
   return async (dispatch) => {
-    const { data: listCreate } = await callApi({
+    const tokenUser = localStorage.getItem('tokenUser')
+    const sessionId = await retriveSessionUser(tokenUser)
+
+    const { data: list } = await callApi({
       method: 'POST',
       endpoint:'list',
+      sessionId: sessionId,
     })
-    console.log(listCreate)
-    // dispatch({
-    //   type: ADD_MOVIE_RATING,
-    //   payload: {
-    //     movieRatingId: id,
-    //     movieRatingMessage: movieRating.status_message,
-    //   } })
+    console.log(list)
   }
 }
 
-export const addMovieToList= (id, rating) => {
+export const addMovieToList= (id, token) => {
   return async (dispatch) => {
     const { data: movieList } = await callApi({
       method: 'POST',
       endpoint:`movie/${id}/rating`,
-      data:{ value: rating },
     })
     dispatch({
       type: ADD_MOVIE_TO_LIST,
