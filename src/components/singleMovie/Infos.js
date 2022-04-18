@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 const Infos = () => {
   const { singleMovie } = useSelector((state) => state.movies)
-  console.log(singleMovie)
   const { title, overview, release_date, tagline } = singleMovie
   return (
     <div>

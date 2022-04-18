@@ -1,11 +1,14 @@
 /* eslint-disable indent */
-import { FETCH_LATEST_RELEASE_MOVIES, FETCH_SINGLE_MOVIE } from '../types'
+import { FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
 
 const INITIAL_STATE = {
   movies: [],
   singleMovie: {},
+  singleMovieRecommendations: [],
   currentPage: 1,
   totalPage: 10,
+  currentPageRecommendations: 1,
+  totalPageRecommendations: 10,
 }
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +24,14 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         singleMovie: action.payload.singleMovie,
+      }
+    
+    case FETCH_MOVIE_RECOMMENDATIONS:
+      return {
+        ...state,
+        singleMovieRecommendations: action.payload.singleMovieRecommendations,
+        currentPageRecommendations: action.payload.currentPageRecommendations,
+        totalPageRecommendations: action.payload.totalPageRecommendations,
       }
 
     default:
