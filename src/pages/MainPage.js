@@ -2,7 +2,7 @@ import { Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import ListMovies from '../components/movies/ListMovies'
-import { getMovies } from '../store/actions/movies'
+import { createMovieList, getMovies } from '../store/actions/movies'
 
 const MainPage = () => {
   const dispatch =  useDispatch()
@@ -14,6 +14,10 @@ const MainPage = () => {
   useEffect(() => {
     dispatch(getMovies(page))
   }, [ dispatch, page ])
+
+  useEffect(() => {
+    dispatch(createMovieList())
+  }, [ dispatch ])
   
   return (
     <Container maxWidth='xl'>

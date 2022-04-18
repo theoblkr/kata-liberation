@@ -1,5 +1,5 @@
 import { callApi } from '../../helpers/api'
-import { ADD_MOVIE_RATING, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
+import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
 
 export const getMovies =  (page) => {
   return async (dispatch) => {
@@ -61,6 +61,38 @@ export const addMovieRating = (id, rating) => {
       payload: {
         movieRatingId: id,
         movieRatingMessage: movieRating.status_message,
+      } })
+  }
+}
+
+export const createMovieList = () => {
+  return async (dispatch) => {
+    const { data: listCreate } = await callApi({
+      method: 'POST',
+      endpoint:'list',
+    })
+    console.log(listCreate)
+    // dispatch({
+    //   type: ADD_MOVIE_RATING,
+    //   payload: {
+    //     movieRatingId: id,
+    //     movieRatingMessage: movieRating.status_message,
+    //   } })
+  }
+}
+
+export const addMovieToList= (id, rating) => {
+  return async (dispatch) => {
+    const { data: movieList } = await callApi({
+      method: 'POST',
+      endpoint:`movie/${id}/rating`,
+      data:{ value: rating },
+    })
+    dispatch({
+      type: ADD_MOVIE_TO_LIST,
+      payload: {
+        movieListId: id,
+        movieListMessage: movieList.status_message,
       } })
   }
 }
