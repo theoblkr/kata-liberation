@@ -5,6 +5,8 @@ import App from './App'
 // Redeux
 import { Provider } from 'react-redux'
 import { store } from './store'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import SinglePage from './pages/SinglePage'
 
 const rootElement = document.getElementById('root')
 const root = ReactDom.createRoot(rootElement)
@@ -12,7 +14,12 @@ const root = ReactDom.createRoot(rootElement)
 root.render(
   <Provider store={store}>
     <StrictMode>
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="movie/:idMovie" element={<SinglePage />}/>
+        </Routes>
+      </BrowserRouter>
     </StrictMode>
   </Provider>
 )
