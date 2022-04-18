@@ -11,7 +11,7 @@ export const getMovies =  (page) => {
     dispatch({
       type: FETCH_LATEST_RELEASE_MOVIES,
       payload: {
-        listMovies: movies.results,
+        listMovies: movies.results.sort((a,b) => Date.parse(b.release_date) - Date.parse(a.release_date)),
         currentPage: movies.page,
         totalPage: movies.total_pages,
       } })
