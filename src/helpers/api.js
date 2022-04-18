@@ -11,7 +11,7 @@ export const callApi = ({
   const headers = {}
   try {
     return axios({
-      url: `${process.env.REACT_APP_API_ROOT}/${endpoint}?api_key=${secret_token}&${queryString}`,
+      url: `${process.env.REACT_APP_API_ROOT}/${endpoint}?api_key=${secret_token}${queryString}`,
       method,
       data,
       headers,

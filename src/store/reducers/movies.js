@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
+import { ADD_MOVIE_RATING, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
 
 const INITIAL_STATE = {
   movies: [],
@@ -9,6 +9,8 @@ const INITIAL_STATE = {
   totalPage: 10,
   currentPageRecommendations: 1,
   totalPageRecommendations: 10,
+  movieRatingId: 1,
+  movieRatingMessage: '',
 }
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -32,6 +34,13 @@ const reducer = (state = INITIAL_STATE, action) => {
         singleMovieRecommendations: action.payload.singleMovieRecommendations,
         currentPageRecommendations: action.payload.currentPageRecommendations,
         totalPageRecommendations: action.payload.totalPageRecommendations,
+      }
+    
+    case ADD_MOVIE_RATING:
+      return {
+        ...state,
+        movieRatingId: action.payload.movieRatingId,
+        movieRatingMessage: action.payload.movieRatingMessage,
       }
 
     default:
