@@ -5,13 +5,14 @@ export const getAPIKey = () => {
 }
 
 export const callApi = ({
-  method, endpoint, data = {}, config = {}, queryString = '',
+  method, endpoint, data = {}, config = {}, queryString = '', guestSession = '',
 }) => {
   const secret_token = getAPIKey()
   const headers = {}
+
   try {
     return axios({
-      url: `${process.env.REACT_APP_API_ROOT}/${endpoint}?api_key=${secret_token}${queryString}`,
+      url: `${process.env.REACT_APP_API_ROOT}/${endpoint}?api_key=${secret_token}${queryString}${guestSession ? `&guest_session_id=${guestSession}` : ''}`,
       method,
       data,
       headers,

@@ -1,5 +1,6 @@
 import { callApi } from '../../helpers/api'
 import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
+import { retriveGuestSessionId } from './authentication'
 
 export const getMovies =  (page) => {
   return async (dispatch) => {
@@ -51,10 +52,13 @@ export const getSingleMovieRecommendations = (id, page) => {
 
 export const addMovieRating = (id, rating) => {
   return async (dispatch) => {
+    const guestSession = await retriveGuestSessionId()
+
     const { data: movieRating } = await callApi({
       method: 'POST',
       endpoint:`movie/${id}/rating`,
       data:{ value: rating },
+      guestSession: guestSession,
     })
     dispatch({
       type: ADD_MOVIE_RATING,
