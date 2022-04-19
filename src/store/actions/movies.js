@@ -1,6 +1,6 @@
 import { callApi } from '../../helpers/api'
-import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
-import { retriveApprovalUser, retriveGuestSessionId, retriveSessionUser } from './authentication'
+import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE, LIST_CREATED } from '../types'
+import { retriveApprovalUser, retriveGuestSessionId } from './authentication'
 
 export const getMovies =  (page) => {
   return async (dispatch) => {
@@ -74,30 +74,42 @@ export const askForCreatingMovieList = async () => {
   return approvalUser
 }
 
-export const createMovieList = () => {
+export const createMovieList = (sessionUser) => {
   return async (dispatch) => {
-    const tokenUser = localStorage.getItem('tokenUser')
-    const sessionId = await retriveSessionUser(tokenUser)
-
     const { data: list } = await callApi({
       method: 'POST',
       endpoint:'list',
-      sessionId: sessionId,
+      sessionId: sessionUser,
+      data: { 'name': 'default',
+        'description': 'default' },
     })
-    console.log(list)
+    if(list.list_id) {
+      localStorage.setItem('listUser', list.list_id)
+      dispatch({
+        type: LIST_CREATED,
+        payload: {
+          listId: list.list_id,
+        },
+      })
+      return true
+    }
+    return false
   }
 }
 
-export const addMovieToList= (id, token) => {
+export const addMovieToList = (moviesId) => {
   return async (dispatch) => {
+    const listId = localStorage.getItem('listUser')
+    const sessionUser = localStorage.getItem('sessionUser')
     const { data: movieList } = await callApi({
       method: 'POST',
-      endpoint:`movie/${id}/rating`,
+      endpoint:`list/${listId}/add_item`,
+      data:{ media_id: moviesId },
+      sessionId: sessionUser,
     })
     dispatch({
       type: ADD_MOVIE_TO_LIST,
       payload: {
-        movieListId: id,
         movieListMessage: movieList.status_message,
       } })
   }

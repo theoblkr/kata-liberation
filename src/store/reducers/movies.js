@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE } from '../types'
+import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE, LIST_CREATED } from '../types'
 
 const INITIAL_STATE = {
   movies: [],
@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   movieRatingMessage: '',
   movieListId: 1,
   movieListMessage: '',
+  listId: 1,
 }
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -44,7 +45,13 @@ const reducer = (state = INITIAL_STATE, action) => {
         movieRatingId: action.payload.movieRatingId,
         movieRatingMessage: action.payload.movieRatingMessage,
       }
-    
+
+    case LIST_CREATED:
+      return {
+        ...state,
+        listId: action.payload.listId,
+      }
+
     case ADD_MOVIE_TO_LIST:
       return {
         ...state,

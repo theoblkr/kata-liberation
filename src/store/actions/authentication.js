@@ -8,14 +8,18 @@ export const retriveGuestSessionId = async () => {
   return guest_session_id
 }
 
-export const retriveSessionUser = async (request_token) => {
-  const { data : { session_id } } = await callApi({
+export const retrieveSessionUser = async (request_token) => {
+  const { data } = await callApi({
     method: 'POST',
     endpoint:'authentication/session/new',
     data: { request_token: request_token },
   })
 
-  return session_id
+  if(data.session_id) {
+    localStorage.setItem('sessionUser', data.session_id)
+    return true
+  }
+  return false
 }
   
 export const retriveApprovalUser = async () => {

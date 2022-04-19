@@ -7,11 +7,7 @@ const AddToList = ({ moviesId }) => {
   const dispatch = useDispatch()
 
   const addToList = () => {
-    const tokenSession = localStorage.getItem('tokenUser')
-    if(tokenSession) {
-      dispatch(addMovieToList(moviesId, tokenSession))
-    }
-    return false
+    dispatch(addMovieToList(moviesId))
   }
   return (
     <>

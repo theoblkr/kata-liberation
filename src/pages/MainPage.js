@@ -4,22 +4,26 @@ import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import ListMovies from '../components/movies/ListMovies'
 import { askForCreatingMovieList, createMovieList, getMovies } from '../store/actions/movies'
+import { retrieveSessionUser } from '../store/actions/authentication'
 
 const MainPage = () => {
   const dispatch =  useDispatch()
   const { search } = useLocation()
   const query = useMemo(() => new URLSearchParams(search), [ search ])
   const [ page, setPage ] = useState(1)
-  
+  const [ listCreated, setListCreated ] = useState(false)
+
   const retrieve_token = query.get('request_token') || null
+
+  const sessionUser = localStorage.getItem('sessionUser')
 
   const onRetriveResultFromPage = (pageNumber) => {
     setPage(pageNumber)
   }
-  
 
   const onCreateMovieList = async () => {
     const urlAuthorizationSession = await askForCreatingMovieList()
+    setListCreated(true)
     window.location.href = urlAuthorizationSession
   }
 
@@ -28,11 +32,16 @@ const MainPage = () => {
   }, [ dispatch, page ])
 
   useEffect(() => {
-    if(retrieve_token) {
-      localStorage.setItem('tokenUser', retrieve_token)
-      dispatch(createMovieList())
+    if(!sessionUser) {
+      retrieveSessionUser(retrieve_token)
     }
-  }, [ dispatch, retrieve_token ])
+  }, [ sessionUser, retrieve_token ])
+
+  useEffect(() => {
+    if(sessionUser && listCreated) {
+      dispatch(createMovieList(sessionUser))
+    }
+  }, [ dispatch, sessionUser, listCreated ])
   
   
   return (
