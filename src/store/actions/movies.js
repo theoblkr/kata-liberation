@@ -1,6 +1,6 @@
 import { callApi } from '../../helpers/api'
 import { ADD_MOVIE_RATING, ADD_MOVIE_TO_LIST, FETCH_LATEST_RELEASE_MOVIES, FETCH_MOVIE_RECOMMENDATIONS, FETCH_SINGLE_MOVIE, LIST_CREATED } from '../types'
-import { retriveApprovalUser, retriveGuestSessionId } from './authentication'
+import { retriveApprovalUser } from './authentication'
 
 export const getMovies =  (page) => {
   return async (dispatch) => {
@@ -52,13 +52,13 @@ export const getSingleMovieRecommendations = (id, page) => {
 
 export const addMovieRating = (id, rating) => {
   return async (dispatch) => {
-    const guestSession = await retriveGuestSessionId()
+    const sessionUser = localStorage.getItem('sessionUser')
 
     const { data: movieRating } = await callApi({
       method: 'POST',
       endpoint:`movie/${id}/rating`,
       data:{ value: rating },
-      guestSession: guestSession,
+      sessionId: sessionUser,
     })
     dispatch({
       type: ADD_MOVIE_RATING,
@@ -101,6 +101,7 @@ export const addMovieToList = (moviesId) => {
   return async (dispatch) => {
     const listId = localStorage.getItem('listUser')
     const sessionUser = localStorage.getItem('sessionUser')
+
     const { data: movieList } = await callApi({
       method: 'POST',
       endpoint:`list/${listId}/add_item`,
